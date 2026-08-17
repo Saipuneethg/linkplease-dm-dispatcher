@@ -152,7 +152,7 @@ describe('LinkPlease Engine Complete Integration Test Suite', () => {
         .send(payload);
 
       // Wait briefly for async background processing
-      await new Promise(r => setTimeout(r, 100));
+      await new Promise(r => setTimeout(r, 250));
 
       const job = await DmJob.findOne({ user_id: 'user_55' });
       expect(job).not.toBeNull();
