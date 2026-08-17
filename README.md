@@ -41,13 +41,6 @@ Returns a clean JSON status payload detailing server health and available API ro
 
 ![Root Status Endpoint JSON Response](https://raw.githubusercontent.com/Saipuneethg/linkplease-dm-dispatcher/main/screenshots/root_endpoint.png)
 
-#### Detailed Verification & Explanation
-- **`name`**: `LinkPlease Instagram DM Webhook Engine` — Identifies the running microservice.
-- **`status`**: `online` — Confirms HTTP server listener and database connectivity.
-- **`version`**: `1.0.0` — API contract version identifier.
-- **`endpoints`**: Maps available routes (`POST /webhook`, `POST /rules`, `GET /rules`, `GET /stats`).
-- **Guarantee**: Guarantees clean health monitoring for uptime checkers and recruiters visiting the root URL.
-
 ---
 
 ### 2. Live API Testing (`GET /stats` & `POST /rules`)
@@ -55,29 +48,12 @@ PowerShell REST execution demonstrating live stats retrieval and 201 Created rul
 
 ![PowerShell Terminal API Output](https://raw.githubusercontent.com/Saipuneethg/linkplease-dm-dispatcher/main/screenshots/powershell_terminal.png)
 
-#### Detailed Verification & Explanation
-1. **Initial Stats Check (`GET /stats`)**:
-   - Executes `Invoke-RestMethod -Uri "http://localhost:3000/stats" -Method Get`.
-   - Returns live system counters initialized to zero: `sent: 0`, `failed: 0`, `queued: 0`, `duplicates_blocked: 0`.
-2. **Rule Creation (`POST /rules`)**:
-   - Constructs a PowerShell hashtable `$rule = @{ keyword = "PRICE"; dm_message = "Here is the price list: linkplease.com/pricing" } | ConvertTo-Json`.
-   - Sends HTTP POST payload to `http://localhost:3000/rules`.
-   - Receives HTTP **201 Created** response with generated ID `rule_1786969252065_j29cd`, confirming rule persistence in MongoDB.
-- **Guarantee**: Validates that rules are immediately registered and active for subsequent comment matching.
-
 ---
 
 ### 3. API Key Security & Unauthorized Activity Restriction (`401 Unauthorized`)
+PowerShell execution demonstrating restriction of unauthorized API activity when invalid credentials are provided:
 
 ![API Key Security & Unauthorized Activity Restriction](https://raw.githubusercontent.com/Saipuneethg/linkplease-dm-dispatcher/main/screenshots/unauthorized_activity.png)
-
-#### Detailed Verification & Explanation
-1. **Security Policy**:
-   - Protects simulation endpoints and API routes from unauthorized access by requiring a valid `X-API-Key` header.
-2. **Execution Test**:
-   - Attempting to initiate a simulation with an invalid or placeholder API key (`"X-API-Key" = "PASTE_YOUR_FULL_API_KEY_HERE"`).
-   - Server returns: `Invoke-RestMethod : The remote server returned an error: (401) Unauthorized.`
-- **Guarantee**: Guarantees that unauthorized requests without valid credentials are restricted instantly at the API boundary.
 
 ---
 
