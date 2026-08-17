@@ -31,9 +31,9 @@ async function connectDB() {
   try {
     await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
     isDbConnected = true;
-    console.log('Successfully connected to MongoDB Atlas');
+    console.log('Successfully connected to MongoDB');
   } catch (err) {
-    console.warn(`Could not connect to primary MongoDB URI (${err.message}).`);
+    console.warn(`MongoDB connection warning (${err.message}).`);
     if (process.env.NODE_ENV !== 'production') {
       try {
         const memModuleName = 'mongodb-memory-server';
@@ -43,10 +43,8 @@ async function connectDB() {
         isDbConnected = true;
         console.log('Connected to MongoMemoryServer fallback');
       } catch (memErr) {
-        throw err;
+        console.error('Local fallback failed:', memErr.message);
       }
-    } else {
-      throw err;
     }
   }
 }
@@ -54,11 +52,10 @@ async function connectDB() {
 app.use(async (req, res, next) => {
   try {
     await connectDB();
-    next();
   } catch (err) {
-    console.error('Database connection error:', err);
-    res.status(500).json({ error: 'Database connection failed' });
+    console.error('Database connection middleware error:', err.message);
   }
+  next();
 });
 
 // -----------------------------------------------------------------------------
