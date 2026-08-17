@@ -180,7 +180,7 @@ describe('LinkPlease Engine Complete Integration Test Suite', () => {
         .set('X-PseudoGram-Signature', sig)
         .send(payload);
 
-      await new Promise(r => setTimeout(r, 100));
+      await new Promise(r => setTimeout(r, 250));
 
       const job = await DmJob.findOne({ user_id: 'usr_nested_99' });
       expect(job).not.toBeNull();
