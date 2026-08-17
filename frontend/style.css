@@ -213,7 +213,6 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-
 }
 
 .section-title {
@@ -382,18 +381,6 @@ body {
   border-left: 4px solid var(--accent-purple);
 }
 
-.code-block {
-  background: #07090E;
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #A7F3D0;
-  overflow-x: auto;
-  margin-top: 12px;
-}
-
 /* Toast Notifications */
 .toast-container {
   position: fixed;
@@ -435,13 +422,4 @@ footer {
   border-top: 1px solid var(--border-glass);
   color: var(--text-dim);
   font-size: 0.85rem;
-}
-
-footer a {
-  color: var(--text-muted);
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: var(--primary);
 }

@@ -15,8 +15,11 @@ function initApp() {
   setInterval(fetchRules, 10000);
 
   // Form Submissions
-  document.getElementById('ruleForm').addEventListener('submit', handleCreateRule);
-  document.getElementById('simForm').addEventListener('submit', handleSimulateWebhook);
+  const ruleForm = document.getElementById('ruleForm');
+  const simForm = document.getElementById('simForm');
+
+  if (ruleForm) ruleForm.addEventListener('submit', handleCreateRule);
+  if (simForm) simForm.addEventListener('submit', handleSimulateWebhook);
 }
 
 // -----------------------------------------------------------------------------
@@ -172,7 +175,6 @@ async function handleSimulateWebhook(e) {
       showToast(`Webhook [${eventType}] ACK: 200 OK`, 'success');
     }
 
-    // Refresh stats immediately
     setTimeout(fetchStats, 600);
   } catch (err) {
     showToast(`Webhook simulation failed: ${err.message}`, 'error');
