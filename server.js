@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const crypto = require('crypto');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb:/
 // Express Middleware & Body Parsing (Capture Raw Body Buffer for HMAC)
 // -----------------------------------------------------------------------------
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({
   verify: (req, res, buf) => {
     req.rawBody = buf;
@@ -242,8 +244,12 @@ async function processDeletedComment(eventData) {
 // API Routes
 // -----------------------------------------------------------------------------
 
-// 0. Root Status Endpoint
+// 0. Root Dashboard UI & API Info Endpoint
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/api/info', (req, res) => {
   res.status(200).json({
     name: 'LinkPlease Instagram DM Webhook Engine',
     status: 'online',
