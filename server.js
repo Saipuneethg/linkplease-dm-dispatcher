@@ -574,10 +574,8 @@ async function runReconciliationLoop() {
 // Database Connection & Server Initialization Helper
 // -----------------------------------------------------------------------------
 let server = null;
-let isInitCompleted = false;
 
-async function initServerless() {
-  if (isInitCompleted) return;
+async function startServer() {
   await connectDB();
 
   try {
@@ -590,14 +588,9 @@ async function initServerless() {
     console.warn('Index sync warning:', idxErr.message);
   }
 
-  // Start background loops
+  // Start background loops in standalone mode
   runDispatcherLoop();
   runReconciliationLoop();
-  isInitCompleted = true;
-}
-
-async function startServer() {
-  await initServerless();
 
   return new Promise((resolve) => {
     const p = process.env.PORT || PORT;
@@ -630,7 +623,7 @@ if (require.main === module) {
 
 module.exports = {
   app,
-  initServerless,
+  connectDB,
   startServer,
   stopServer,
   WebhookEvent,
