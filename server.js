@@ -29,21 +29,20 @@ async function connectDB() {
   }
   const uri = process.env.MONGO_URI || process.env.MONGODB_URI || MONGO_URI;
   try {
-    await mongoose.connect(uri, { serverSelectionTimeoutMS: 4000 });
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
     isDbConnected = true;
     console.log('Successfully connected to MongoDB Atlas');
   } catch (err) {
-    console.warn(`Could not connect to MongoDB Atlas (${err.message}).`);
+    console.warn(`Could not connect to primary MongoDB URI (${err.message}).`);
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Starting local MongoMemoryServer fallback for development...');
       try {
-        const { MongoMemoryServer } = require('mongodb-memory-server');
+        const memModuleName = 'mongodb-memory-server';
+        const { MongoMemoryServer } = require(memModuleName);
         const memServer = await MongoMemoryServer.create();
         await mongoose.connect(memServer.getUri());
         isDbConnected = true;
-        console.log('Successfully connected to local MongoMemoryServer fallback');
+        console.log('Connected to MongoMemoryServer fallback');
       } catch (memErr) {
-        console.error('Failed to start memory server fallback:', memErr);
         throw err;
       }
     } else {
