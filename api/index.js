@@ -1,10 +1,10 @@
-const { app, startServer } = require('../server');
+const { app, initServerless } = require('../server');
 
 module.exports = async (req, res) => {
   try {
-    await startServer();
+    await initServerless();
   } catch (err) {
-    console.error('Serverless init error:', err);
+    console.error('Vercel serverless init error:', err);
   }
   return app(req, res);
 };

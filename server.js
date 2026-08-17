@@ -577,19 +577,30 @@ async function runReconciliationLoop() {
 // Database Connection & Server Initialization Helper
 // -----------------------------------------------------------------------------
 let server = null;
+let isInitCompleted = false;
 
-async function startServer() {
+async function initServerless() {
+  if (isInitCompleted) return;
   await connectDB();
 
-  // Ensure unique indexes are built
-  await UserRuleDelivery.syncIndexes();
-  await WebhookEvent.syncIndexes();
-  await Rule.syncIndexes();
-  await DmJob.syncIndexes();
+  try {
+    // Ensure unique indexes are built
+    await UserRuleDelivery.syncIndexes();
+    await WebhookEvent.syncIndexes();
+    await Rule.syncIndexes();
+    await DmJob.syncIndexes();
+  } catch (idxErr) {
+    console.warn('Index sync warning:', idxErr.message);
+  }
 
   // Start background loops
   runDispatcherLoop();
   runReconciliationLoop();
+  isInitCompleted = true;
+}
+
+async function startServer() {
+  await initServerless();
 
   return new Promise((resolve) => {
     const p = process.env.PORT || PORT;
@@ -603,6 +614,7 @@ async function startServer() {
 async function stopServer() {
   isDispatcherRunning = false;
   isReconcilerRunning = false;
+  isInitCompleted = false;
   if (server) {
     await new Promise(resolve => server.close(resolve));
   }
@@ -621,6 +633,7 @@ if (require.main === module) {
 
 module.exports = {
   app,
+  initServerless,
   startServer,
   stopServer,
   WebhookEvent,
