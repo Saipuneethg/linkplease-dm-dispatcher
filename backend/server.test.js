@@ -15,6 +15,7 @@ describe('LinkPlease Engine Complete Integration Test Suite', () => {
 
   beforeAll(async () => {
     process.env.NODE_ENV = 'test';
+    process.env.PORT = '0';
     process.env.API_KEY = 'test_secret_key_123';
     await startServer();
   }, 30000);
