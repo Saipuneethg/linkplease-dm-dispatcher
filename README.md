@@ -67,6 +67,20 @@ PowerShell REST execution demonstrating live stats retrieval and 201 Created rul
 
 ---
 
+### 3. API Key Security & Unauthorized Activity Restriction (`401 Unauthorized`)
+
+![API Key Security & Unauthorized Activity Restriction](https://raw.githubusercontent.com/Saipuneethg/linkplease-dm-dispatcher/main/screenshots/unauthorized_activity.png)
+
+#### Detailed Verification & Explanation
+1. **Security Policy**:
+   - Protects simulation endpoints and API routes from unauthorized access by requiring a valid `X-API-Key` header.
+2. **Execution Test**:
+   - Attempting to initiate a simulation with an invalid or placeholder API key (`"X-API-Key" = "PASTE_YOUR_FULL_API_KEY_HERE"`).
+   - Server returns: `Invoke-RestMethod : The remote server returned an error: (401) Unauthorized.`
+- **Guarantee**: Guarantees that unauthorized requests without valid credentials are restricted instantly at the API boundary.
+
+---
+
 ## Automated Test Results
 
 Ran full Jest integration suite (`npm test`):
